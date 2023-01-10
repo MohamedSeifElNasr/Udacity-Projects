@@ -1,0 +1,51 @@
+Query 1.
+/
+SELECT E.FirstName || " " || E.LastName as EmployeeName,
+       Count(*) NumberOfCustomers
+FROM Employee E
+JOIN Customer C ON E.EmployeeId = C.SupportRepId
+GROUP BY 1;
+/
+
+Query 2.
+/
+SELECT I.BillingCountry,
+       sum(T.Bytes)/1000000 Megabytes
+FROM Invoice I
+JOIN InvoiceLine IL ON I.InvoiceId = IL.InvoiceId
+JOIN Track T ON IL.TrackId = T.TrackId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10;
+/
+
+Query 3.
+/
+SELECT CASE
+           WHEN Q = 38 THEN 'Quantity is 38'
+           WHEN Q = 36 THEN 'Quantity is 36'
+       END NumberOfOrders,
+       count(*)
+FROM
+  (SELECT C.CustomerId,
+          C.FirstName,
+          C. LastName,
+          sum(IL.Quantity) Q
+   FROM Customer C
+   JOIN Invoice I ON C.CustomerId = I.CustomerId
+   JOIN InvoiceLine IL ON I.InvoiceId = IL.InvoiceId
+   GROUP BY 1)
+GROUP BY 1;
+/
+
+Query 4.
+/
+SELECT I.BillingCountry,
+       sum(IL.UnitPrice*IL.Quantity) TotalSpending
+FROM Invoice I
+JOIN InvoiceLine IL ON I.InvoiceId = IL.InvoiceId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10;
+/
+
